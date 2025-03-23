@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  background-color: var(--clr1);
+  color: var(--clr4);
+
+  font-family: "Happy Monkey", system-ui;
+}
+
+.wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,20 @@
+.heading {
+    font-family: heading;
+    font-size: 3rem;
+    letter-spacing: .3rem;
+
+    background-color: var(--clr2);
+    color: var(--clr4);
+    border-radius: var(--BR);
+
+    padding: 1.5rem 1rem 1rem 1rem;
+    width: calc(100% - 4rem);
+    margin: 1rem auto;
+
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+
+    animation: down-up .5s ease-out forwards;
+}
+

@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap');
+
+:root {
+  --clr1: #070F2B;
+  --clr2: #1B1A55;
+  --clr3: #535C91;
+  --clr4: #9290C3;
+
+  --BR: 7px;
+}
+
+@font-face {
+  font-family: heading;
+  src: url("../src/assets/fonts/CSMirage-Regular_demo-BF67c66c3624d4d.otf");
+}
+
+@keyframes down-up {
+    0%{
+        transform: translateY(1rem) scale(.95);
+    }
+    100% {
+        transform: translateY(0rem) scale(1);
+    }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
