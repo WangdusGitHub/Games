@@ -129,7 +129,7 @@ export default function TecTacToe() {
     const userName = result.value;
     setPlayerName(userName);
 
-    const newSocket = io("http://localhost:3001", {
+    const newSocket = io("https://games-5c68.onrender.com", {
       autoConnect: true,
     });
 
