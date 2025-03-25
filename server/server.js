@@ -3,9 +3,8 @@ const { Server } = require("socket.io");
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
-  cors: "*", // Allow all origins for deployment
+  cors: "*",
 });
-
 
 const allUsers = {};
 
@@ -13,6 +12,7 @@ io.on("connection", (socket) => {
   allUsers[socket.id] = {
     socket: socket,
     online: true,
+    playing: false,
   };
 
   socket.on("request_to_play", (data) => {

@@ -5,7 +5,14 @@ import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
 
-export default function TecTacToe() {
+export default function TecTacToe({
+  playerName,
+  setPlayerName,
+  socket,
+  setSocket,
+  playOnline,
+  setPlayOnline,
+}) {
   const renderSquares = [
     [1, 2, 3],
     [4, 5, 6],
@@ -16,9 +23,9 @@ export default function TecTacToe() {
   const [currPlayer, setCurrPlayer] = useState("circle");
   const [finishState, setFinishState] = useState(false);
   const [winnerLine, setWinnerLine] = useState([]);
-  const [playOnline, setPlayOnline] = useState(false);
-  const [socket, setSocket] = useState(null);
-  const [playerName, setPlayerName] = useState(null);
+  // const [playOnline, setPlayOnline] = useState(playerOnline); // marked
+  // const [socket, setSocket] = useState(socket); // marked
+  // const [playerName, setPlayerName] = useState(playerName); // marked
   const [opponent, setOpponent] = useState(null);
   const [playingAs, setPlayingAs] = useState(null);
 
@@ -84,19 +91,19 @@ export default function TecTacToe() {
     }
   }, [gameState]);
 
-  const takePlayerName = async () => {
-    const result = await Swal.fire({
-      title: "Enter your Name",
-      input: "text",
-      showCancelButton: true,
-      inputValidator: (value) => {
-        if (!value) {
-          return "you need to enter your name";
-        }
-      },
-    });
-    return result;
-  };
+  // const takePlayerName = async () => {
+  //   const result = await Swal.fire({
+  //     title: "Enter your Name",
+  //     input: "text",
+  //     showCancelButton: true,
+  //     inputValidator: (value) => {
+  //       if (!value) {
+  //         return "you need to enter your name";
+  //       }
+  //     },
+  //   });
+  //   return result;
+  // };
 
   socket?.on("playerMoveFromServer", (data) => {
     const id = data.state.id;
@@ -110,9 +117,6 @@ export default function TecTacToe() {
     setCurrPlayer(data.state.sign === "circle" ? "cross" : "circle");
   });
 
-  socket?.on("connect", function () {
-    setPlayOnline(true);
-  });
   socket?.on("OpponentNotFound", function () {
     setOpponent(false);
   });
@@ -140,17 +144,17 @@ export default function TecTacToe() {
     setSocket(newSocket);
   }
 
-  if (!playOnline) {
-    return (
-      <>
-        <div className="game-wrapper">
-          <button className="btn" onClick={handlePlayOnlineClick}>
-            Play Online
-          </button>
-        </div>
-      </>
-    );
-  }
+  // if (!playOnline) {
+  //   return (
+  //     <>
+  //       <div className="game-wrapper">
+  //         <button className="btn" onClick={handlePlayOnlineClick}>
+  //           Play Online
+  //         </button>
+  //       </div>
+  //     </>
+  //   );
+  // }
 
   if (playOnline && !opponent) {
     return (
