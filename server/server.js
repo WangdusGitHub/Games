@@ -14,6 +14,7 @@ io.on("connection", (socket) => {
     online: true,
     playing: false,
   };
+  BroadcastUserCount();
 
   socket.on("request_to_play", (data) => {
     const currUser = allUsers[socket.id];
@@ -57,8 +58,14 @@ io.on("connection", (socket) => {
   socket.on("disconnect", function () {
     const currUser = allUsers[socket.id];
     currUser.online = false;
+    delete allUsers[socket.id];
   });
 });
+
+const BroadcastUserCount = () => {
+  const userCount = Object.keys(allUsers).length;
+  io.emit("userCount", userCount);
+};
 
 const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT);

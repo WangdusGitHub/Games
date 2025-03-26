@@ -23,9 +23,6 @@ export default function TecTacToe({
   const [currPlayer, setCurrPlayer] = useState("circle");
   const [finishState, setFinishState] = useState(false);
   const [winnerLine, setWinnerLine] = useState([]);
-  // const [playOnline, setPlayOnline] = useState(playerOnline); // marked
-  // const [socket, setSocket] = useState(socket); // marked
-  // const [playerName, setPlayerName] = useState(playerName); // marked
   const [opponent, setOpponent] = useState(null);
   const [playingAs, setPlayingAs] = useState(null);
 
@@ -91,20 +88,6 @@ export default function TecTacToe({
     }
   }, [gameState]);
 
-  // const takePlayerName = async () => {
-  //   const result = await Swal.fire({
-  //     title: "Enter your Name",
-  //     input: "text",
-  //     showCancelButton: true,
-  //     inputValidator: (value) => {
-  //       if (!value) {
-  //         return "you need to enter your name";
-  //       }
-  //     },
-  //   });
-  //   return result;
-  // };
-
   socket?.on("playerMoveFromServer", (data) => {
     const id = data.state.id;
     setGameState((prevState) => {
@@ -125,35 +108,23 @@ export default function TecTacToe({
     setOpponent(data.opponent);
   });
 
-  async function handlePlayOnlineClick() {
-    const result = await takePlayerName();
-    if (!result.isConfirmed) {
-      return;
-    }
-    const userName = result.value;
-    setPlayerName(userName);
+  // async function handlePlayOnlineClick() {
+  //   const result = await takePlayerName();
+  //   if (!result.isConfirmed) {
+  //     return;
+  //   }
+  //   const userName = result.value;
+  //   setPlayerName(userName);
 
-    const newSocket = io("http://localhost:3001", {
-      autoConnect: true,
-    });
+  //   const newSocket = io("http://localhost:3001", {
+  //     autoConnect: true,
+  //   });
 
-    newSocket?.emit("request_to_play", {
-      playerName: userName,
-    });
+  //   newSocket?.emit("request_to_play", {
+  //     playerName: userName,
+  //   });
 
-    setSocket(newSocket);
-  }
-
-  // if (!playOnline) {
-  //   return (
-  //     <>
-  //       <div className="game-wrapper">
-  //         <button className="btn" onClick={handlePlayOnlineClick}>
-  //           Play Online
-  //         </button>
-  //       </div>
-  //     </>
-  //   );
+  //   setSocket(newSocket);
   // }
 
   if (playOnline && !opponent) {
@@ -209,8 +180,8 @@ export default function TecTacToe({
 
           {!finishState
             ? opponent && currPlayer === playingAs
-              ? "your turn"
-              : `${opponent}'s turn`
+              ? `its "your" turn`
+              : `its "${opponent}" turn`
             : ""}
         </h2>
 
