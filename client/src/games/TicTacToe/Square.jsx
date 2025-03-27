@@ -56,7 +56,7 @@ export default function Square({
         ? renderCircle
         : currElement === "cross"
         ? renderCross
-        : icon}
+        : ""}
     </div>
   );
 }

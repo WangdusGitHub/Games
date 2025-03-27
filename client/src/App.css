@@ -140,7 +140,8 @@ input::placeholder {
 
 .games-field {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+  grid-template-columns: auto auto auto auto auto;
   gap: 1rem;
   place-items: center;
   /* border: 1px solid red; */

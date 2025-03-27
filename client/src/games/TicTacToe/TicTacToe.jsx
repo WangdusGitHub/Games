@@ -3,16 +3,8 @@ import "./TicTacToe.css";
 import Square from "./Square";
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
-import Swal from "sweetalert2";
 
-export default function TecTacToe({
-  playerName,
-  setPlayerName,
-  socket,
-  setSocket,
-  playOnline,
-  setPlayOnline,
-}) {
+export default function TecTacToe({ playerName, socket, playOnline }) {
   const renderSquares = [
     [1, 2, 3],
     [4, 5, 6],
@@ -72,14 +64,35 @@ export default function TecTacToe({
     return null;
   };
 
-  // const resetGame = () => {
-  //   setGameState(renderSquares);
-  //   setCurrPlayer(currPlayer === "circle" ? "cross" : "circle");
-  //   setFinishState(false);
-  //   setWinnerLine([]);
-  //   setOpponent(currPlayer === "circle" ? "cross" : "circle");
-  //   setPlayingAs(currPlayer === "circle" ? "cross" : "circle");
-  // };
+  const resetGame = (newPlayingAs) => {
+    setGameState([
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+    ]); // Reset the board
+    setCurrPlayer("circle"); // Circle always starts the game
+    setFinishState(false); // Reset the finish state
+    setWinnerLine([]); // Clear the winner line
+    setPlayingAs(newPlayingAs); // Update the player's role
+    console.log(gameState);
+  };
+
+  const handleReset = () => {
+    const newPlayingAs = playingAs === "circle" ? "cross" : "circle";
+    socket?.emit("resetGame", newPlayingAs); // Notify the server
+    resetGame(newPlayingAs); // Reset locally
+  };
+
+  useEffect(() => {
+    // Listen for the resetGame event from the server
+    socket?.on("resetGame", (newPlayingAs) => {
+      resetGame(newPlayingAs);
+    });
+
+    return () => {
+      socket?.off("resetGame"); // Clean up the listener
+    };
+  }, [socket]);
 
   useEffect(() => {
     const winner = checkWinner();
@@ -107,25 +120,9 @@ export default function TecTacToe({
     setPlayingAs(data.Symbol);
     setOpponent(data.opponent);
   });
-
-  // async function handlePlayOnlineClick() {
-  //   const result = await takePlayerName();
-  //   if (!result.isConfirmed) {
-  //     return;
-  //   }
-  //   const userName = result.value;
-  //   setPlayerName(userName);
-
-  //   const newSocket = io("http://localhost:3001", {
-  //     autoConnect: true,
-  //   });
-
-  //   newSocket?.emit("request_to_play", {
-  //     playerName: userName,
-  //   });
-
-  //   setSocket(newSocket);
-  // }
+  socket?.on("resetGame", (data) => {
+    resetGame();
+  });
 
   if (playOnline && !opponent) {
     return (
@@ -185,12 +182,12 @@ export default function TecTacToe({
             : ""}
         </h2>
 
-        {/* <button
+        <button
           className={`${finishState ? "" : "not-visible"}`}
-          onClick={resetGame}
+          onClick={handleReset}
         >
           reset
-        </button> */}
+        </button>
       </div>
     </>
   );

@@ -49,22 +49,53 @@ io.on("connection", (socket) => {
         currUser.socket.emit("playerMoveFromServer", {
           ...data,
         });
+
+        // socket?.on("resetGame", () => {
+        //   resetGame();
+        // });
+        // currUser.socket.on("resetGame", (data) => {
+        //   opponentPlayer.socket.emit(
+        //     "resetGame",
+        //     data === "circle" ? "cross" : "circle"
+        //   );
+        // });
+        // opponentPlayer.socket.on("resetGame", () => {
+        //   currUser.socket.emit(
+        //     "resetGame",
+        //     data === "circle" ? "cross" : "circle"
+        //   );
+        // });
       });
     } else {
       currUser.socket.emit("opponentNotFound");
     }
   });
 
-  socket.on("disconnect", function () {
+  socket.on("resetGame", (newPlayingAs) => {
     const currUser = allUsers[socket.id];
-    currUser.online = false;
+    const opponentPlayer = currUser.opponent;
+
+    if (currUser && opponentPlayer) {
+      // Broadcast the resetGame event to both players with the new roles
+      currUser.socket.emit("resetGame", newPlayingAs);
+      opponentPlayer.socket.emit(
+        "resetGame",
+        newPlayingAs === "circle" ? "cross" : "circle"
+      );
+    }
+  });
+
+  socket.on("disconnect", function () {
+    // const currUser = allUsers[socket.id];
+    // currUser.online = false;
     delete allUsers[socket.id];
+    BroadcastUserCount();
   });
 });
 
 const BroadcastUserCount = () => {
   const userCount = Object.keys(allUsers).length;
-  io.emit("userCount", userCount);
+  io.emit("userCount", Math.floor(userCount));
 };
 
 const PORT = process.env.PORT || 3001;

@@ -19,7 +19,7 @@ export default function App() {
     setPlayOnline(true);
   });
 
-  async function handlePlayOnlineClick() {
+  async function handlePlayOnline() {
     const newSocket = io("http://localhost:3001", {
       autoConnect: true,
     });
@@ -34,11 +34,12 @@ export default function App() {
   const handleGameSelect = () => {
     // console.log(e);
     setSelectedGame("Tic-Tac-Toe");
-    handlePlayOnlineClick();
+    handlePlayOnline();
   };
 
   useEffect(() => {
     localStorage.setItem("playerName", playerName);
+    // handlePlayOnline();
   }, [playerName]);
 
   if (!playerName) {
@@ -112,9 +113,6 @@ export default function App() {
         playerName={playerName}
         socket={socket}
         playOnline={playOnline}
-        setPlayerName={setPlayerName}
-        setSocket={setSocket}
-        setPlayOnline={setPlayOnline}
       />
     ),
     "Cat & Mouse": (
@@ -122,9 +120,6 @@ export default function App() {
         playerName={playerName}
         socket={socket}
         playOnline={playOnline}
-        setPlayerName={setPlayerName}
-        setSocket={setSocket}
-        setPlayOnline={setPlayOnline}
       />
     ),
   };
