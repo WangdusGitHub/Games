@@ -1,11 +1,8 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Square({
   socket,
-  gameState,
   winnerLine,
-  setFinishState,
   finishState,
   setGameState,
   id,
@@ -13,50 +10,49 @@ export default function Square({
   setCurrPlayer,
   currElement,
   playingAs,
+  symbol,
+  gameState,
 }) {
   const [icon, setIcon] = useState(null);
-
   const renderCircle = <i className="fa-regular fa-circle"></i>;
   const renderCross = <i className="fa-solid fa-xmark"></i>;
 
-  const handleClick = () => {
-    if (!icon) {
-      if (currPlayer === "circle") {
+  useEffect(() => {
+    if (gameState) {
+      const rowIndex = Math.floor(id / 3);
+      const colIndex = id % 3;
+      const value = gameState[rowIndex][colIndex];
+      if (value === "circle") {
         setIcon(renderCircle);
-      } else {
+      } else if (value === "cross") {
         setIcon(renderCross);
+      } else {
+        setIcon(null);
       }
+    }
+  }, [gameState, id, renderCircle, renderCross]);
 
-      const myCurrPlayer = currPlayer;
+  const handleClick = () => {
+    if (!icon && socket && !finishState && currPlayer === symbol) {
+      const sign = symbol;
       socket.emit("playerMoveFromClient", {
         state: {
           id,
-          sign: myCurrPlayer,
+          sign,
         },
       });
-      setCurrPlayer(currPlayer === "circle" ? "cross" : "circle");
-
-      setGameState((prevState) => {
-        let newState = [...prevState];
-        const rowIndex = Math.floor(id / 3);
-        const colIndex = id % 3;
-        newState[rowIndex][colIndex] = currPlayer;
-        return newState;
-      });
+      setCurrPlayer(symbol === "circle" ? "cross" : "circle");
     }
   };
+
   return (
     <div
       className={`square 
         ${winnerLine.includes(id) ? "highlight" : ""} 
         ${currPlayer !== playingAs ? "not-allowed" : ""}`}
-      onClick={finishState ? null : handleClick}
+      onClick={handleClick}
     >
-      {currElement === "circle"
-        ? renderCircle
-        : currElement === "cross"
-        ? renderCross
-        : ""}
+      {icon}
     </div>
   );
 }

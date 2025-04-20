@@ -1,0 +1,157 @@
+:root {
+  --game-path-width: 5px;
+}
+
+.game-wrapper {
+  width: var(100% - 4rem);
+  height: 500px;
+  padding: 1rem;
+  padding-top: 5rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#circle {
+  height: 90%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  border: var(--game-path-width) solid var(--clr3);
+  position: relative;
+  z-index: 0;
+}
+
+#vertices {
+  position: absolute;
+  height: 100%;
+  aspect-ratio: 1/1;
+}
+
+#vertices div {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3em;
+  aspect-ratio: 1/1;
+  /* background-color: blue; */
+}
+
+#vertex0,
+#vertex1,
+#vertex2,
+#vertex3,
+#vertex4,
+#vertex5 {
+  z-index: 1;
+}
+
+#vertex0 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#vertex1 {
+  top: -5%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#vertex2 {
+  top: 40%;
+  left: -4%;
+  transform: translate(0, -50%);
+}
+
+#vertex3 {
+  top: 40%;
+  right: -4%;
+  transform: translate(0, -50%);
+}
+
+#vertex4 {
+  bottom: 4.5%;
+  left: 20.5%;
+  transform: translate(-50%, 0);
+}
+
+#vertex5 {
+  bottom: 4.5%;
+  right: 20.5%;
+  transform: translate(50%, 0);
+}
+
+#edges {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+#edges div {
+  position: absolute;
+  width: var(--game-path-width);
+  height: 50%;
+  background-color: var(--clr3);
+}
+
+#edge1 {
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#edge2 {
+  top: 45%;
+  left: 25%;
+  transform: translate(0, -50%) rotate(101deg);
+}
+
+#edge3 {
+  top: 45%;
+  right: 25%;
+  transform: translate(0, -50%) rotate(-101deg);
+}
+
+#edge4 {
+  bottom: 5%;
+  left: 35%;
+  transform: translate(-50%, 0) rotate(216deg);
+}
+
+#edge5 {
+  bottom: 5%;
+  right: 35%;
+  transform: translate(50%, 0) rotate(-216deg);
+}
+
+.btn {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  border-radius: 50%;
+  outline: none;
+  border: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn:after {
+  content: "";
+  position: relative;
+  height: 55%;
+  aspect-ratio: 1/1;
+  background-color: var(--clr3);
+  border-radius: 50%;
+}
+
+#cat,
+#mouse {
+  height: 4rem;
+  position: absolute;
+  z-index: 2;
+}
