@@ -70,10 +70,10 @@ export default function TecTacToe({ playerName, socket, playOnline }) {
       [4, 5, 6],
       [7, 8, 9],
     ]); // Reset the board
-    setCurrPlayer("circle"); // Circle always starts the game
-    setFinishState(false); // Reset the finish state
-    setWinnerLine([]); // Clear the winner line
-    setPlayingAs(newPlayingAs); // Update the player's role
+    setCurrPlayer("circle");
+    setFinishState(false); 
+    setWinnerLine([]);
+    setPlayingAs(newPlayingAs); 
     console.log(gameState);
   };
 

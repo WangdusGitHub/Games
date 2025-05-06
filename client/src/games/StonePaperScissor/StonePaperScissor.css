@@ -1,0 +1,65 @@
+.scores {
+  display: flex;
+  justify-content: space-evenly;
+  width: calc(100% - 2rem);
+  background-color: var(--clr2);
+  padding: 1rem 0;
+  margin: 1rem;
+  border-radius: var(--BR);
+}
+.game-wrapper {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.board2 {
+  aspect-ratio: 1/1;
+
+  display: grid;
+  grid-template-columns: auto 2px auto;
+  gap: 0.7rem;
+
+  padding: 1rem;
+  margin: 1rem;
+  margin-bottom: 3rem;
+  background-color: var(--clr2);
+  border-radius: var(--BR);
+
+  height: 20rem;
+
+  z-index: 1;
+}
+.player, .opponent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+.line {
+    content: "";
+    height: 100%;
+    width: 2px;
+    background-color: var(--clr4);
+}
+.btns {
+    background-color: var(--clr2);
+    padding: 1rem;
+    border-radius: var(--BR);
+    display: flex;
+    gap: 1rem;
+}
+.btns button {
+    aspect-ratio: 1/1;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: var(--clr1);
+    color: aliceblue;
+    outline: none;
+    border: none;
+}
+.btns button:active {
+  transform: scale(0.95);
+}

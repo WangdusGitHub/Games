@@ -20,15 +20,16 @@ body {
   right: 0;
   bottom: 5rem;
   background-color: var(--clr2);
-  padding: 0.5rem 1rem;
+  padding: 0.2rem .7rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: .5rem;
   border-top-left-radius: var(--BR);
   border-bottom-left-radius: var(--BR);
   border: 1px solid var(--clr3);
   border-right: none;
+  z-index: 10;
 }
 
 .green-light {
@@ -209,4 +210,12 @@ input::placeholder {
     padding-left: 1rem;
     font-size: 40px;
   }
+}
+
+.waiting {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+  width: 100%;
 }

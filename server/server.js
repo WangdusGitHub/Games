@@ -28,6 +28,19 @@ function findOpponentSocket(socket) {
   return null;
 }
 
+function determineStonePaperScissorWinner(p1, p2) {
+  if (p1 === p2) return "tie";
+  if (
+    (p1 === "rock" && p2 === "scissors") ||
+    (p1 === "paper" && p2 === "rock") ||
+    (p1 === "scissors" && p2 === "paper")
+  ) {
+    return "player1";
+  } else {
+    return "player2";
+  }
+}
+
 io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
   clients.add(socket);
@@ -38,6 +51,7 @@ io.on("connection", (socket) => {
     gameSelected: null,
     playerName: null,
     opponent: null,
+    choice: null,
   });
   broadcastPlayerCount();
 
@@ -46,6 +60,22 @@ io.on("connection", (socket) => {
     if (currUser) {
       currUser.playerName = data.playerName;
       console.log(`Player name updated for ${socket.id}: ${data.playerName}`);
+    }
+  });
+
+  socket.on("playerChoice", (data) => {
+    clientData.choice = data;
+    const opponentSocket = clientData.opponent;
+
+    if (opponentSocket) {
+      const opponentData = clientData.get(opponentSocket);
+      if (opponentData.choice) {
+        socket.emit("opponentChoice", opponentData.choice);
+        opponentSocket.emit("opponentChoice", clientData.choice);
+
+        clientData.choice = null;
+        opponentData.choice = null;
+      }
     }
   });
 

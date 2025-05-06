@@ -5,6 +5,7 @@ import { setupTicTacToeSocket, emitPlayerMove } from "./tictactoeService";
 export default function TicTacToe({
   playerName,
   socket,
+  online,
   opponentName,
   symbol,
   waitingForOpponent,

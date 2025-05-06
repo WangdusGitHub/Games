@@ -10,15 +10,15 @@ export default function App() {
   const [socket, setSocket] = useState(null);
   const [online, setOnline] = useState(false);
   const [onlineCount, setOnlineCount] = useState(0);
-  const [playerName, setPlayerName] = useState(() => {
-    const storedName = localStorage.getItem("playerName");
-    return storedName ? storedName : "";
-  });
   const [selectedGame, setSelectedGame] = useState(null);
   const [gameSelectionMade, setGameSelectionMade] = useState(false);
   const [opponentName, setOpponentName] = useState("");
   const [symbol, setSymbol] = useState("");
   const [waitingForOpponent, setWaitingForOpponent] = useState(false);
+  const [playerName, setPlayerName] = useState(() => {
+    const storedName = localStorage.getItem("playerName");
+    return storedName ? storedName : "";
+  });
 
   useEffect(() => {
     const newSocket = io("http://localhost:3001");
@@ -44,9 +44,6 @@ export default function App() {
       console.log(
         `Opponent found: ${data.opponent}, playing as ${data.Symbol}`
       );
-      // if (!selectedGame) {
-      //   setSelectedGame("Tic-Tac-Toe");
-      // }
     });
 
     newSocket.on("opponentNotFound", () => {
@@ -58,7 +55,6 @@ export default function App() {
       console.log("Opponent disconnected. Game ended.");
       setOpponentName("");
       setWaitingForOpponent(false);
-      // Optionally reset game state or UI
     });
 
     newSocket.on("resetGame", (opponentSymbol) => {
@@ -122,9 +118,8 @@ export default function App() {
           <CatAndMouse
             playerName={playerName}
             socket={socket}
-            online={online}
             opponentName={opponentName}
-            symbol={symbol}
+            waitingForOpponent={waitingForOpponent}
           />
         );
       case "Stone Paper Scissor":
@@ -134,7 +129,7 @@ export default function App() {
             socket={socket}
             online={online}
             opponentName={opponentName}
-            symbol={symbol}
+            setWaitingForOpponent={setWaitingForOpponent}
           />
         );
       default:
@@ -155,7 +150,7 @@ export default function App() {
         <button
           type="submit"
           onClick={(e) => {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
             setPlayerName(UserName);
           }}
         >
@@ -202,12 +197,12 @@ export default function App() {
   return (
     <>
       <Heading text={selectedGame} />
-      {waitingForOpponent ? <p>Waiting for an opponent...</p> : renderGame()}
-      {opponentName && (
+      {waitingForOpponent ? <p className="waiting">Waiting for an opponent...</p> : renderGame()}
+      {/* {opponentName && (
         <p>
           Playing against: {opponentName} ({symbol})
         </p>
-      )}
+      )} */}
       <div className="show-online">
         <div className={online ? "green-light" : "red-light"}></div>
         <div>{online ? onlineCount : "Offline"}</div>
