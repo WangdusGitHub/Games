@@ -39,10 +39,10 @@ export default function StonePaperScissor({
         console.log("You win!");
         setScore((prev) => ({ ...prev, player: prev.player + 1 }));
       }
-      setPlayerChoice(null);
+      // setPlayerChoice(null);
       setOpponentChoice(null);
     } else {
-      socket.emit("playerChoice", { choice });
+      socket.emit("playerChoice", { playerChoice, opponentName });
     }
   }, [playerChoice, opponentChoice]);
 
@@ -50,12 +50,12 @@ export default function StonePaperScissor({
     console.log(opponentChoice);
   }, [opponentChoice]);
 
+  socket.on("opponentChoice", (data) => {
+    console.log("Opponent chose:", data);
+    setOpponentChoice(data);
+    console.log(data);
+  });
   useEffect(() => {
-    socket.on("opponentChoice", (data) => {
-      console.log("Opponent chose:", data);
-      setOpponentChoice(data);
-      console.log(data);
-    });
 
     socket.on("resetGame", () => {
       setScore({ player: 0, opponent: 0 });

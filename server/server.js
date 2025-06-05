@@ -13,7 +13,7 @@ const waitingPlayers = new Map();
 function broadcastPlayerCount() {
   const playerCount = clients.size;
   io.emit("playerCount", playerCount);
-  console.log(`Broadcasted player count: ${playerCount}`);
+  // console.log(`Broadcasted player count: ${playerCount}`);
 }
 
 function findOpponentSocket(socket) {
@@ -59,23 +59,26 @@ io.on("connection", (socket) => {
     const currUser = clientData.get(socket);
     if (currUser) {
       currUser.playerName = data.playerName;
-      console.log(`Player name updated for ${socket.id}: ${data.playerName}`);
+      // console.log(`Player name updated for ${socket.id}: ${data.playerName}`);
     }
   });
 
   socket.on("playerChoice", (data) => {
-    clientData.choice = data;
-    const opponentSocket = clientData.opponent;
-
+    const playerData = clientData.get(socket);
+    playerData.choice = data.playerChoice;
+    const opponentSocket = playerData.opponent;
+    console.log("got opponent socket: ", opponentSocket);
     if (opponentSocket) {
       const opponentData = clientData.get(opponentSocket);
-      if (opponentData.choice) {
-        socket.emit("opponentChoice", opponentData.choice);
-        opponentSocket.emit("opponentChoice", clientData.choice);
+      console.log("got opponent data: ",clientData.get(opponentSocket) 
+);
+      // if (opponentData.choice) {
+      //   socket.emit("opponentChoice", opponentData.choice);
+      //   opponentSocket.emit("opponentChoice", playerData.choice);
 
-        clientData.choice = null;
-        opponentData.choice = null;
-      }
+      //   playerData.choice = null;
+      //   opponentData.choice = null;
+      // }
     }
   });
 
@@ -83,9 +86,9 @@ io.on("connection", (socket) => {
     const currUser = clientData.get(socket);
     if (currUser) {
       currUser.gameSelected = data.gameName;
-      console.log(
-        `${data.playerName} (${socket.id}) selected game: ${data.gameName}`
-      );
+      // console.log(
+      //   `${data.playerName} (${socket.id}) selected game: ${data.gameName}`
+      // );
 
       if (!waitingPlayers.has(data.gameName)) {
         waitingPlayers.set(data.gameName, new Set());
@@ -93,11 +96,11 @@ io.on("connection", (socket) => {
       waitingPlayers.get(data.gameName).add(socket);
       currUser.waiting = true;
       socket.emit("waitingForOpponent", { gameName: data.gameName });
-      console.log(
-        `${data.playerName} added to waiting list for ${
-          data.gameName
-        }. Current waiting: ${waitingPlayers.get(data.gameName)?.size}`
-      );
+      // console.log(
+      //   `${data.playerName} added to waiting list for ${
+      //     data.gameName
+      //   }. Current waiting: ${waitingPlayers.get(data.gameName)?.size}`
+      // );
 
       const waitingList = waitingPlayers.get(data.gameName);
       if (waitingList && waitingList.size >= 2) {
@@ -132,9 +135,9 @@ io.on("connection", (socket) => {
             gameName: data.gameName,
           });
 
-          console.log(
-            `Game started between ${player1Data.playerName} (${player1.id}) and ${player2Data.playerName} (${player2.id}) for ${data.gameName}`
-          );
+          // console.log(
+          //   `Game started between ${player1Data.playerName} (${player1.id}) and ${player2Data.playerName} (${player2.id}) for ${data.gameName}`
+          // );
           setupGameEventListeners(player1, player2, data.gameName);
         } else if (player1) {
           waitingPlayers.get(data.gameName)?.add(player1);
@@ -149,10 +152,10 @@ io.on("connection", (socket) => {
     const opponentSocket = findOpponentSocket(socket);
     if (opponentSocket) {
       opponentSocket.emit("playerMoveFromServer", data);
-      console.log(
-        `Move from ${socket.id} relayed to ${opponentSocket.id}:`,
-        data
-      );
+      // console.log(
+      //   `Move from ${socket.id} relayed to ${opponentSocket.id}:`,
+      //   data
+      // );
     } else {
       console.log(`Opponent not found for ${socket.id}`);
     }
@@ -169,13 +172,13 @@ io.on("connection", (socket) => {
       currentUserData.playing = false;
       currentUserData.waiting = true;
       currentUserData.opponent = null; // Clear the opponent
-      console.log(
-        `${currentUserData.playerName} (${
-          socket.id
-        }) requested to play again and added to waiting list for ${gameName}. Current waiting: ${
-          waitingPlayers.get(gameName)?.size
-        }`
-      );
+      // console.log(
+      //   `${currentUserData.playerName} (${
+      //     socket.id
+      //   }) requested to play again and added to waiting list for ${gameName}. Current waiting: ${
+      //     waitingPlayers.get(gameName)?.size
+      //   }`
+      // );
 
       // Check if there are now enough players to start a new game
       const waitingList = waitingPlayers.get(gameName);
@@ -211,9 +214,9 @@ io.on("connection", (socket) => {
             gameName: gameName,
           });
 
-          console.log(
-            `New game started between ${player1Data.playerName} (${player1.id}) and ${player2Data.playerName} (${player2.id}) for ${gameName} after play again.`
-          );
+          // console.log(
+          //   `New game started between ${player1Data.playerName} (${player1.id}) and ${player2Data.playerName} (${player2.id}) for ${gameName} after play again.`
+          // );
           setupGameEventListeners(player1, player2, gameName);
         } else if (player1) {
           waitingPlayers.get(gameName)?.add(player1);
@@ -225,7 +228,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log(`Client disconnected: ${socket.id}`);
+    // console.log(`Client disconnected: ${socket.id}`);
     clients.delete(socket);
     clientData.delete(socket);
 
