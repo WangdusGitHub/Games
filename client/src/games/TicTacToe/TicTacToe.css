@@ -119,3 +119,8 @@
 .not-visible {
   display: none;
 }
+
+.finish-btn {
+  display: flex;
+  gap: 1rem;
+}

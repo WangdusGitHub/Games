@@ -5,10 +5,9 @@
   "scripts": {
     "start": "node server.js",
     "start:prod": "node server.js"
-
   },
   "dependencies": {
-    "nodemon": "^3.1.9",
+    "nodemon": "^3.1.11",
     "socket.io": "^4.0.0"
   }
 }

@@ -10,6 +10,7 @@ export default function TicTacToe({
   symbol,
   waitingForOpponent,
   setWaitingForOpponent, // Receive the setWaitingForOpponent function as a prop
+  setSelectedGame,
 }) {
   const renderSquares = [
     [0, 1, 2],
@@ -93,7 +94,12 @@ export default function TicTacToe({
       setWinnerLine([]);
     }
   };
-
+  const handleGoBack = () => {
+    // handleReset();
+    // setWaitingForOpponent(false);
+    socket.emit("goBack");
+    setSelectedGame(null);
+  };
   useEffect(() => {
     const winner = checkWinner(gameState);
     if (winner) {
@@ -151,71 +157,6 @@ export default function TicTacToe({
     );
   };
 
-<<<<<<< HEAD
-=======
-  socket?.on("playerMoveFromServer", (data) => {
-    const id = data.state.id;
-    setGameState((prevState) => {
-      let newState = [...prevState];
-      const rowIndex = Math.floor(id / 3);
-      const colIndex = id % 3;
-      newState[rowIndex][colIndex] = data.state.sign;
-      return newState;
-    });
-    setCurrPlayer(data.state.sign === "circle" ? "cross" : "circle");
-  });
-
-  socket?.on("connect", function () {
-    setPlayOnline(true);
-  });
-  socket?.on("OpponentNotFound", function () {
-    setOpponent(false);
-  });
-  socket?.on("OpponentFound", function (data) {
-    setPlayingAs(data.Symbol);
-    setOpponent(data.opponent);
-  });
-
-  async function handlePlayOnlineClick() {
-    const result = await takePlayerName();
-    if (!result.isConfirmed) {
-      return;
-    }
-    const userName = result.value;
-    setPlayerName(userName);
-
-    const newSocket = io("https://games-5c68.onrender.com", {
-      autoConnect: true,
-    });
-
-    newSocket?.emit("request_to_play", {
-      playerName: userName,
-    });
-
-    setSocket(newSocket);
-  }
-
-  if (!playOnline) {
-    return (
-      <>
-        <div className="game-wrapper">
-          <button className="btn" onClick={handlePlayOnlineClick}>
-            Play Online
-          </button>
-        </div>
-      </>
-    );
-  }
-
-  if (playOnline && !opponent) {
-    return (
-      <div className="game-wrapper">
-        <p className="waiting">waiting for opponent. </p>
-      </div>
-    );
-  }
-
->>>>>>> 38f0c04a47d7f641520f54493fcf3a0e7aa8c947
   return (
     <div className="game-wrapper">
       <div className="players">
@@ -237,15 +178,26 @@ export default function TicTacToe({
         {finishState === "draw" ? "It's a draw!" : ""}
       </h2>
 
-      {finishState && (
-        <button
-          className=""
-          onClick={handleReset}
-          disabled={waitingForOpponent}
-        >
-          Play Again
-        </button>
-      )}
+      <section className="finish-btn">
+        {finishState && (
+          <button
+            className="btn"
+            onClick={handleReset}
+            disabled={waitingForOpponent}
+          >
+            Play Again
+          </button>
+        )}
+        {finishState && (
+          <button
+            className="btn"
+            onClick={handleGoBack}
+            disabled={waitingForOpponent}
+          >
+            Go Back
+          </button>
+        )}
+      </section>
     </div>
   );
 }

@@ -111,6 +111,7 @@ export default function App() {
             symbol={symbol}
             waitingForOpponent={waitingForOpponent}
             setWaitingForOpponent={setWaitingForOpponent}
+            setSelectedGame={setSelectedGame}
           />
         );
       case "Cat & Mouse":
